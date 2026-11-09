@@ -16,6 +16,20 @@ report = saved.report;
 phantom_names = {'one_circle','two_circles_left_right','three_circles_triangle'};
 model_names = {'A3','B6'};
 
+% ---- Layout options ----
+% STANDARDIZE = 'none' : ylim per subplot (data mengisi kotak, tidak ada kosong)  <-- default
+% STANDARDIZE = 'row'  : baris atas share ylim, baris bawah share ylim
+% STANDARDIZE = 'all'  : keempat subplot share ylim (bisa bikin kosong atas-bawah)
+STANDARDIZE = 'none';
+
+% CLIP_FRAC: buang sekian fraksi ekstrem di tiap ujung sebelum hitung min/max.
+% 0    = pakai min/max murni
+% 0.01 = buang 1% outlier di tiap ujung (disarankan)
+CLIP_FRAC = 0.01;
+
+% Padding fraction for ylim (5% of each subplot's data range)
+pad_frac = 0.05;
+
 % Load all cases
 cases = {};
 case_labels = {};
@@ -32,50 +46,96 @@ end
 
 nCases = length(cases);
 
-% Find global scale for real and imaginary based on actual data range
-all_real = [];
-all_imag = [];
-for c = 1:nCases
-    data = cases{c};
-    all_real = [all_real; real(data.I_h); real(data.I_i)];
-    all_imag = [all_imag; imag(data.I_h); imag(data.I_i)];
-end
-real_min = min(all_real);
-real_max = max(all_real);
-imag_min = min(all_imag);
-imag_max = max(all_imag);
-
-fprintf('Real range: [%.4g, %.4g] A, Imag range: [%.4g, %.4g] A\n', ...
-    real_min, real_max, imag_min, imag_max);
+% Colours
+col_homog    = [0.000 0.447 0.741];   % biru
+col_inhomog  = [0.850 0.325 0.098];   % oranye
+col_diff     = [0.494 0.184 0.556];   % ungu
 
 % Create separate figure for each case
 for c = 1:nCases
     data = cases{c};
     order = 1:length(data.I_h);
+    dI = data.I_i - data.I_h;
 
-    fig = figure('visible','on','color','w','position',[100 100 1200 600], ...
+    % ===== Build 4 groups of data (one per subplot) =====
+    groups = {
+        [real(data.I_h); real(data.I_i)], ...   % subplot 1
+        [imag(data.I_h); imag(data.I_i)], ...   % subplot 2
+        real(dI),                        ...    % subplot 3
+        imag(dI)                                 % subplot 4
+    };
+
+    % ===== Compute ylim per subplot, with outlier clipping =====
+    ylims = zeros(4,2);
+    for k = 1:4
+        v = sort(groups{k}(:));
+        n = length(v);
+        k_lo = max(1, floor(CLIP_FRAC*n) + 1);
+        k_hi = min(n, ceil((1-CLIP_FRAC)*n));
+        raw_lo = v(k_lo);
+        raw_hi = v(k_hi);
+        if raw_hi == raw_lo
+            s = max(abs(raw_hi), 1);
+            ylims(k,1) = raw_lo - pad_frac*s;
+            ylims(k,2) = raw_hi + pad_frac*s;
+        else
+            d = raw_hi - raw_lo;
+            ylims(k,1) = raw_lo - pad_frac*d;
+            ylims(k,2) = raw_hi + pad_frac*d;
+        end
+    end
+
+    % ===== Apply sharing mode =====
+    if strcmp(STANDARDIZE, 'all')
+        all_lo = min(ylims(:,1));
+        all_hi = max(ylims(:,2));
+        ylims = repmat([all_lo all_hi], 4, 1);
+    elseif strcmp(STANDARDIZE, 'row')
+        top_lo = min(ylims(1:2,1));  top_hi = max(ylims(1:2,2));
+        bot_lo = min(ylims(3:4,1));  bot_hi = max(ylims(3:4,2));
+        ylims = [top_lo top_hi; top_lo top_hi; bot_lo bot_hi; bot_lo bot_hi];
+    end
+
+    fig = figure('visible','on','color','w','position',[100 100 1200 750], ...
         'Name',['Current response: ' case_labels{c}]);
 
-    % Real part: I_h vs I_i
-    subplot(1,2,1);
-    plot(order, real(data.I_h), 'b-', 'linewidth', 1.5); hold on;
-    plot(order, real(data.I_i), 'r--', 'linewidth', 1.5);
+    % ===== (1,1) Real part: I_h vs I_i =====
+    subplot(2,2,1);
+    plot(order, real(data.I_h), '-',  'color', col_homog,   'linewidth', 1.5); hold on;
+    plot(order, real(data.I_i), '--', 'color', col_inhomog, 'linewidth', 1.5);
     grid on;
-    ylim([real_min real_max]);
+    ylim(ylims(1,:));
+    xlabel('Pair index (acquisition order)', 'fontsize', 12);
     ylabel('Re(I) [A]', 'fontsize', 12);
-    title(case_labels{c}, 'fontsize', 14);
-    legend('Homogeneous','Inhomogeneous','location','northeast');
-    xlabel('Pair index (acquisition order)', 'fontsize', 12);
+    legend({'I_h (homogen)', 'I_i (inhomogen)'}, 'location', 'best');
 
-    % Imaginary part: I_h vs I_i
-    subplot(1,2,2);
-    plot(order, imag(data.I_h), 'b-', 'linewidth', 1.5); hold on;
-    plot(order, imag(data.I_i), 'r--', 'linewidth', 1.5);
+    % ===== (1,2) Imaginary part: I_h vs I_i =====
+    subplot(2,2,2);
+    plot(order, imag(data.I_h), '-',  'color', col_homog,   'linewidth', 1.5); hold on;
+    plot(order, imag(data.I_i), '--', 'color', col_inhomog, 'linewidth', 1.5);
     grid on;
-    ylim([imag_min imag_max]);
-    ylabel('Im(I) [A]', 'fontsize', 12);
-    legend('Homogeneous','Inhomogeneous','location','northeast');
+    ylim(ylims(2,:));
     xlabel('Pair index (acquisition order)', 'fontsize', 12);
+    ylabel('Im(I) [A]', 'fontsize', 12);
+    legend({'I_h (homogen)', 'I_i (inhomogen)'}, 'location', 'best');
+
+    % ===== (2,1) Real part of difference =====
+    subplot(2,2,3);
+    plot(order, real(dI), '-', 'color', col_diff, 'linewidth', 1.5);
+    grid on;
+    ylim(ylims(3,:));
+    xlabel('Pair index (acquisition order)', 'fontsize', 12);
+    ylabel('\DeltaRe(I) [A]', 'fontsize', 12);
+    legend({'\DeltaI = I_i - I_h'}, 'location', 'best');
+
+    % ===== (2,2) Imaginary part of difference =====
+    subplot(2,2,4);
+    plot(order, imag(dI), '-', 'color', col_diff, 'linewidth', 1.5);
+    grid on;
+    ylim(ylims(4,:));
+    xlabel('Pair index (acquisition order)', 'fontsize', 12);
+    ylabel('\DeltaIm(I) [A]', 'fontsize', 12);
+    legend({'\DeltaI = I_i - I_h'}, 'location', 'best');
 
     base = case_files{c};
     drawnow;
