@@ -153,12 +153,14 @@ inclusion properties so the imaginary response is visible. These values and
 the simple regularization are illustrative; they are not validated tissue
 properties or a validated imaging method. Each case catches its own failure.
 Successful cases save a result MAT and a pair-wise TIA CSV. The main script
-also saves six three-panel reconstruction PNGs, six homogeneous-versus-inclusion
-current PNGs (120 pairs in acquisition order), and `demo_run_status.mat` under
-`results/reconstruction_demo/`. The current plots show real and imaginary
-currents in separate panels. `demo_reconstruction/plot_current_diff.m` is
-called automatically after the cases finish; run it alone to redraw those
-plots from the saved status MAT without repeating forward solves.
+also saves `demo_run_status.mat` under `results/reconstruction_demo/` and opens
+six three-panel reconstruction figures plus six homogeneous-versus-inclusion
+current figures in the Octave GUI. Each current figure shows 120 pairs in
+acquisition order, with real and imaginary currents in separate panels. Figures
+are left open for editing and manual SVG export; no PNG is written
+automatically. `demo_reconstruction/plot_current_diff.m` is called after the
+cases finish; run it alone to redraw the current figures from the saved status
+MAT without repeating forward solves.
 
 The demo calls the active mesh builders `cceit_mesh_A3` and `cceit_mesh_B6` and
 the shared voltage-driven pair solver. It has only been reviewed statically in

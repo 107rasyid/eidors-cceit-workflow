@@ -117,6 +117,8 @@ This is essential for the reproducibility claim.
   │   └── plot_B6_resolution_study.m
   │   └── plot_AB_pair_admittance_current.m / cceit_plot_pair_series.m
   │   └── cceit_plot_layer_sensitivity.m / cceit_plot_medium_sensitivity.m
+  ├── diagnostics_goal2/             ← isolated, optional Goal 2 interpretation checks
+  │   └── check_electrode_arcs.m / run_thickness_trend.m
   ├── results/                      ← MAT, CSV, PNG, and run log outputs
   └── arsip/                        ← superseded, exploratory, and out-of-scope code
   └── demo_reconstruction/           ← demo-only reconstruction helpers

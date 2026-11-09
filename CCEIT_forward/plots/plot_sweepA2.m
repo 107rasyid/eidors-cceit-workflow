@@ -18,5 +18,7 @@ if ~isfield(L, 'res') || ~isfield(L, 'P0') || ...
     error('plot_sweepA2: results are incomplete or baseline-mismatched');
 end
 
-output_path = cceit_plot_layer_sensitivity(P, L.res, P.outdir, P.plot_export_dpi);
-fprintf('Saved: %s\n', output_path);
+output_paths = cceit_plot_layer_sensitivity(P, L.res, P.outdir, P.plot_export_dpi);
+for k = 1:numel(output_paths)
+    fprintf('Saved: %s\n', output_paths{k});
+end

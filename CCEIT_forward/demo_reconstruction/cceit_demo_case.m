@@ -4,14 +4,16 @@ function result = cceit_demo_case(P, phantom_id, model_id, outdir)
 % Inputs: P shared parameters; phantom_id 1..3; model_id 1=A3, 2=B6;
 %         outdir folder for per-case MAT and TIA CSV files.
 % Outputs: result struct with pair data, TIA voltages, differential impedance,
-%          reconstruction, ground truth, mesh, and forward-check metrics.
+%          conductivity/permittivity reconstructions and ground truth, mesh,
+%          and forward-check metrics;
+%          also saves a per-case MAT and TIA CSV.
 % Scope: educational reconstruction demonstration, not paper validation.
-% Manuscript ref: supplementary workflow demonstration only.
+% Manuscript ref: Section III implementation demonstration; not validation.
 
 %% Fixed illustrative settings
 % Local copies keep these example choices separate from paper sweep settings.
 P.f = 3e6; P.d = 1e-3;
-n = P.nElec; w = 2*pi*P.f; Rf = 10e3; alpha_rel = 1e-3;  % reduced regularization for better imaginary recovery
+n = P.nElec; w = 2*pi*P.f; Rf = 10e3; alpha_rel = 1e-3;
 gamma_bg = P.sigma + 1i*w*P.eps0*P.epsr;
 % The large inclusion permittivity makes the imaginary change visible here;
 % these illustrative material values are not tissue-property estimates.
@@ -80,19 +82,28 @@ if size(J,1) ~= numel(dZ) && size(J,2)==numel(dZ), J=J.'; end
 if size(J,1) ~= numel(dZ)
     error('cceit_demo_case: Jacobian rows do not match the 120 pair data');
 end
-%% Reconstruct complex admittivity change from differential impedance data
-% The diagonal sensitivity weighting and separate real/imaginary lambdas are
-% demonstration choices, not a validated or tuned imaging method.
-diagJ=sum(abs(J).^2,1).'; reg=1./max(diagJ,eps);
-normal=J*(reg.*J');
-lambda_real=alpha_rel*real(trace(normal))/size(normal,1);
-lambda_imag=lambda_real*0.5;  % 50% less regularization for imaginary
-dZ_real=real(dZ); dZ_imag=imag(dZ);
-dgamma_real=(reg.*J')*((normal+lambda_real*eye(size(normal)))\dZ_real);
-dgamma_imag=(reg.*J')*((normal+lambda_imag*eye(size(normal)))\dZ_imag);
-dgamma=dgamma_real + 1i*dgamma_imag;
-fprintf('Reconstruction: |Re(dgamma)|_max=%.4g, |Im(dgamma)|_max=%.4g, ratio=%.4g\n', ...
-    max(abs(dgamma_real)), max(abs(dgamma_imag)), max(abs(dgamma_imag))/max(abs(dgamma_real)));
+%% Jointly reconstruct conductivity and imaginary admittivity changes
+% EIDORS supplies a complex sensitivity for real conductivity perturbations.
+% The real system below couples both data quadratures so a complex Jacobian
+% is not incorrectly applied to the real and imaginary data independently.
+J_real = [real(J), -imag(J); imag(J), real(J)];
+dZ_real_vector = [real(dZ); imag(dZ)];
+sens_power = sum(abs(J).^2,1).';
+weight_elem = 1 ./ max(sens_power,eps);
+weights = [weight_elem; weight_elem];
+weighted_J_transpose = bsxfun(@times,J_real.',weights);
+normal = J_real * weighted_J_transpose;
+lambda = alpha_rel * real(trace(normal)) / size(normal,1);
+solution = weighted_J_transpose * ...
+    ((normal + lambda*eye(size(normal))) \ dZ_real_vector);
+n_elem = size(elems,1);
+delta_sigma_reconstruction = solution(1:n_elem);
+delta_gamma_im_reconstruction = solution(n_elem+1:end);
+delta_epsr_reconstruction = delta_gamma_im_reconstruction / (w*P.eps0);
+dgamma = delta_sigma_reconstruction + 1i*delta_gamma_im_reconstruction;
+fprintf(['Reconstruction: max |delta_sigma|=%.4g S/m, ' ...
+    'max |delta_epsr|=%.4g\n'],max(abs(delta_sigma_reconstruction)), ...
+    max(abs(delta_epsr_reconstruction)));
 
 phantom_names={'one_circle','two_circles_left_right','three_circles_triangle'};
 base=sprintf('%s_%s',phantom_names{phantom_id},model);
@@ -109,9 +120,16 @@ for k=1:numel(I_h)
         real(Vtia_h(k)),imag(Vtia_h(k)),real(Vtia_i(k)),imag(Vtia_i(k)));
 end
 fclose(fid);
+delta_gamma_true = gamma_i - gamma_h;
+delta_sigma_true = real(delta_gamma_true);
+delta_epsr_true = imag(delta_gamma_true) / (w*P.eps0);
 result=struct('model',model,'phantom_id',phantom_id,'mesh_info',mesh_info, ...
     'pairs',pairs,'I_h',I_h,'I_i',I_i,'Vtia_h',Vtia_h,'Vtia_i',Vtia_i, ...
-    'dZ',dZ,'dgamma_reconstruction',dgamma,'delta_gamma_true',gamma_i-gamma_h, ...
+    'dZ',dZ,'dgamma_reconstruction',dgamma, ...
+    'delta_sigma_reconstruction',delta_sigma_reconstruction, ...
+    'delta_epsr_reconstruction',delta_epsr_reconstruction, ...
+    'delta_sigma_true',delta_sigma_true,'delta_epsr_true',delta_epsr_true, ...
+    'delta_gamma_true',delta_gamma_true, ...
     'nodes',nodes,'elements',elems,'Rf_ohm',Rf, ...
     'alpha_rel',alpha_rel,'max_dcc',max([out_h.dcc;out_i.dcc]), ...
     'max_dfloat',max([out_h.dfloat;out_i.dfloat]), ...

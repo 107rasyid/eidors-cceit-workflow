@@ -1,7 +1,7 @@
 % PLOT_CURRENT_DIFF Plot homogeneous and inclusion currents for saved cases.
 % Purpose: inspect the 120-pair forward-current change before TIA processing.
 % Inputs: results/reconstruction_demo/demo_run_status.mat from the demo script.
-% Outputs: up to six PNGs, one per completed phantom/model case.
+% Outputs: up to six figures shown in the Octave GUI, one per completed case.
 % Note: the demo calls this after saving its case status; run it alone to
 %       redraw the current figures without repeating forward solves.
 % Manuscript ref: standalone educational reconstruction demonstration.
@@ -53,7 +53,8 @@ for c = 1:nCases
     data = cases{c};
     order = 1:length(data.I_h);
 
-    fig = figure('visible','off','color','w','position',[100 100 1200 600]);
+    fig = figure('visible','on','color','w','position',[100 100 1200 600], ...
+        'Name',['Current response: ' case_labels{c}]);
 
     % Real part: I_h vs I_i
     subplot(1,2,1);
@@ -77,8 +78,6 @@ for c = 1:nCases
     xlabel('Pair index (acquisition order)', 'fontsize', 12);
 
     base = case_files{c};
-    print(fig, fullfile(project_root,'results','reconstruction_demo',['current_response_' base '.png']), ...
-        '-dpng', '-r150');
-    close(fig);
-    fprintf('Saved: current_response_%s.png\n', base);
+    drawnow;
+    fprintf('Displayed current-response figure: %s\n',base);
 end

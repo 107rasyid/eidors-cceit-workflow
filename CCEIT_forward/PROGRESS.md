@@ -181,6 +181,8 @@ the optional reconstruction demo is separate and does not change the paper workf
   status MAT. Each completed phantom/model case now gets a current plot with
   homogeneous and inclusion responses across the 120 pairs in acquisition
   order; the script can also redraw these plots from saved data alone.
+- Demo reconstruction and current plots now open in the Octave GUI and remain
+  open for editing/manual SVG export; PNG export is disabled for these plots.
 - The prior undefined-function risk from legacy filenames is removed by these
   call-site changes. Octave was not run, so a fresh demo run is still needed to
   confirm the end-to-end reconstruction pipeline on A3/B6.
@@ -191,3 +193,45 @@ the optional reconstruction demo is separate and does not change the paper workf
   the validated NETGEN folder through `cceit_params()` before adding it to
   `PATH`. It no longer depends on `CCEIT_NETGEN_BIN` already being set in the
   Octave process. The script was not run; verify it manually in a fresh session.
+
+## Isolated Goal 2 interpretation diagnostics
+
+- Added `diagnostics_goal2/check_electrode_arcs.m` to compare realized A3/B6
+  electrode boundary arcs and node counts without solving the forward model.
+- Added `diagnostics_goal2/run_thickness_trend.m` to compare A3/B6 `Delta_layer`
+  at d=1, 2, 3, and 5 mm. It keeps the active B6 ring target up to 0.35 mm,
+  reduces it to d/4 for thinner layers, catches failures per thickness, and
+  stores diagnostic outputs under `results/goal2_diagnostics/`.
+- These scripts do not alter the production workflow or its saved results.
+  They have not been run in Octave.
+
+## Reconstruction demo complex inverse correction
+
+- Replaced independent inversions of the real and imaginary impedance data
+  with a real-augmented system that jointly solves for conductivity change
+  and imaginary-admittivity change using both quadratures of the complex
+  Jacobian.
+- The demo now converts imaginary admittivity change to relative-permittivity
+  change and plots ground truth and reconstruction for both conductivity and
+  relative permittivity on separate, unit-consistent scales. Ground-truth and
+  estimate panels use independent color limits; the console reports peak
+  estimate-to-ground-truth ratios to make under-recovery explicit.
+- The existing ideal TIA forward conversion is unchanged. Octave was not run;
+  regenerate the six reconstruction figures and inspect the recovered maps
+  before using them as paper results.
+
+## Goal 3 plots remain open in Octave GUI
+
+- plot_results.m now opens Fig. 4a, 4b, and 4c visibly and leaves them open
+  after saving their PNG copies. It no longer closes all existing figures at
+  startup.
+- Split the former layer-sensitivity triptych into thickness,
+  permittivity, and conductivity figures, each saved as its own PNG and left
+  open in the GUI.
+- Replaced the medium figure's annotation-based shared legend with a small
+  axes-based legend to avoid Octave annotation property errors.
+- The medium-sensitivity output is now four frequency-specific figures, each
+  with separate conductivity and permittivity panels; this avoids the crowded
+  4-by-2 canvas and its overlapping titles. Filenames include the frequency.
+- Octave was not run; use run_logged('plot_results') and export SVG from the
+  open figure windows as needed.

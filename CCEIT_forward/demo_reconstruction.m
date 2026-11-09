@@ -3,11 +3,11 @@
 % ideal TIA model and a simple complex-Jacobian reconstruction example.
 % Cases: one circle, two circles left/right, and three circles in a triangle;
 %        each case uses active Model A3 and coarse Model B6 meshes.
-% Outputs: one MAT and TIA CSV per case, six reconstruction PNGs, six
-%          homogeneous/inclusion current PNGs, plus a status MAT under
-%          results/reconstruction_demo/.
+% Outputs: one MAT and TIA CSV per case, six conductivity/permittivity
+%          reconstruction figures and six homogeneous/inclusion current
+%          figures shown in the Octave GUI, plus a status MAT.
 % Scope: educational verification only; this is not paper validation.
-% Manuscript ref: supplementary workflow demonstration only.
+% Manuscript ref: Section III implementation demonstration; not validation.
 clear; close all; clc;
 
 %% Project setup and output folder
@@ -34,8 +34,8 @@ for p = 1:3
     end
 end
 
-%% Plot ground truth and reconstructed complex components
-% Each PNG shows truth, real reconstruction, and imaginary reconstruction.
+%% Plot conductivity and relative-permittivity ground truth and reconstructions
+% The inverse solve estimates the two real physical property changes jointly.
 model_names = {'A3','B6'};
 for p = 1:3
     for m = 1:2
@@ -45,28 +45,40 @@ for p = 1:3
             continue;
         end
 
-        gt = real(data.delta_gamma_true);
-        rec = data.dgamma_reconstruction;
-        limGT = max(abs(gt(:)));
-        limRec = max(abs([real(rec(:));imag(rec(:))]));
-        if limGT == 0, limGT = 1; end
-        if limRec == 0, limRec = 1; end
+        gt_sigma = data.delta_sigma_true;
+        rec_sigma = data.delta_sigma_reconstruction;
+        gt_epsr = data.delta_epsr_true;
+        rec_epsr = data.delta_epsr_reconstruction;
+        lim_sigma_gt = max(abs(gt_sigma(:)));
+        lim_sigma_rec = max(abs(rec_sigma(:)));
+        lim_epsr_gt = max(abs(gt_epsr(:)));
+        lim_epsr_rec = max(abs(rec_epsr(:)));
+        if lim_sigma_gt == 0, lim_sigma_gt = 1; end
+        if lim_sigma_rec == 0, lim_sigma_rec = 1; end
+        if lim_epsr_gt == 0, lim_epsr_gt = 1; end
+        if lim_epsr_rec == 0, lim_epsr_rec = 1; end
+        fprintf(['Peak |estimate| / peak |ground truth|: %s, ' ...
+            'sigma=%.3g%%, epsilon_r=%.3g%%\n'],model_names{m}, ...
+            100*max(abs(rec_sigma(:)))/max(max(abs(gt_sigma(:))),eps), ...
+            100*max(abs(rec_epsr(:)))/max(max(abs(gt_epsr(:))),eps));
 
-        fig = figure('visible','off','color','w','position',[100 100 1600 500]);
+        fig = figure('visible','on','color','w','position',[100 100 1200 850], ...
+            'Name',sprintf('Reconstruction: %s / %s',names{p},model_names{m}));
 
-        subplot(1,3,1); cceit_demo_map(data.nodes,data.elements,gt, ...
-            'Ground truth: \Delta\sigma (S/m)',[-limGT limGT]);
-
-        subplot(1,3,2); cceit_demo_map(data.nodes,data.elements,real(rec), ...
-            sprintf('%s: Re(\Delta\gamma) (S/m)',model_names{m}),[-limRec limRec]);
-
-        subplot(1,3,3); cceit_demo_map(data.nodes,data.elements,imag(rec), ...
-            sprintf('%s: Im(\Delta\gamma) (S/m)',model_names{m}),[-limRec limRec]);
+        subplot(2,2,1); cceit_demo_map(data.nodes,data.elements,gt_sigma, ...
+            'Ground truth: \Delta\sigma (S/m)',[-lim_sigma_gt lim_sigma_gt]);
+        subplot(2,2,2); cceit_demo_map(data.nodes,data.elements,rec_sigma, ...
+            sprintf('%s: reconstructed \Delta\sigma (S/m)',model_names{m}), ...
+            [-lim_sigma_rec lim_sigma_rec]);
+        subplot(2,2,3); cceit_demo_map(data.nodes,data.elements,gt_epsr, ...
+            'Ground truth: \Delta\epsilon_r',[-lim_epsr_gt lim_epsr_gt]);
+        subplot(2,2,4); cceit_demo_map(data.nodes,data.elements,rec_epsr, ...
+            sprintf('%s: reconstructed \Delta\epsilon_r',model_names{m}), ...
+            [-lim_epsr_rec lim_epsr_rec]);
 
         base = sprintf('%s_%s',strrep(names{p},'_','_'),model_names{m});
-        print(fig,fullfile(outdir,['reconstruction_' base '.png']),'-dpng','-r150');
-        close(fig);
-        fprintf('Saved: reconstruction_%s.png\n', base);
+        drawnow;
+        fprintf('Displayed reconstruction figure: %s\n',base);
     end
 end
 %% Save the complete in-memory case status for optional follow-up plots
