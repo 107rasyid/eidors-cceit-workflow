@@ -127,7 +127,7 @@ This is essential for the reproducibility claim.
   ├── femm_validation/                ← optional FEMM Current Flow cross-solver check
   │   └── run_b6_femm.py / README.md   ← reads saved B6 boundary geometry; FEMM remeshes interiors
   ├── ansys_validation/               ← experimental Maxwell AC Conduction cross-solver check
-  │   └── run_b6_maxwell.ps1 / run_b6_maxwell.py / matrix_to_pairs.py / README.md
+  │   └── run_b6_maxwell.ps1 / run_b6_maxwell.py / export_ymatrix_csv.py / README.md
   ├── results/                      ← MAT, CSV, PNG, and run log outputs
   └── arsip/                        ← superseded, exploratory, and out-of-scope code
   └── demo_reconstruction/           ← demo-only reconstruction helpers

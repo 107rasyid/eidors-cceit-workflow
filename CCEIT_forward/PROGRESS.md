@@ -59,7 +59,8 @@ the optional reconstruction demo is separate and does not change the paper workf
   conduction admittance matrices; a reduced terminal matrix can represent the
   zero-current constraints on unselected electrodes.
 - Added `ansys_validation/run_b6_maxwell.ps1`, the embedded AEDT model script
-  `run_b6_maxwell.py`, and standard-Python postprocessor `matrix_to_pairs.py`.
+  `run_b6_maxwell.py`, and standard-Python postprocessor
+  `export_ymatrix_csv.py`.
   The model constructs a 16-electrode explicit-ring approximation, sets depth
   to 1 m, assigns a thin resistive contact sector, and exports a grounded
   15-port Y matrix. The postprocessor reconstructs the 16-terminal matrix and
@@ -86,6 +87,23 @@ the optional reconstruction demo is separate and does not change the paper workf
   script further to 4/1 segments and one adaptive pass. This very coarse attempt
   has not been run and, even if it solves, is only a feasibility check rather
   than quantitative B6 validation.
+- Inspected the newer GUI-generated Maxwell project and report CSVs. The AEDT
+  project stores medium conductivity as 0.025 S/m and assigns that material to
+  the medium disk, but both exported `G_uS` and `Re(Y)_uS` matrices contain 225
+  exact zeros while the C and Im(Y) matrices are nonzero. Therefore the zero
+  real pair values originate in Maxwell's solved/reported matrix, not in the
+  pair reduction. The matrix result inside AEDT must be checked to distinguish
+  solver assembly from report-expression behavior. This current script also
+  uses a 1 mm, epsr=1.58 layer and a 1 mm contact region (sigma=0.1 S/m,
+  epsr=10); this is not the original 2 mm B6 model or a purely real 0.01 Ohm.m
+  contact, so phase differences are expected.
+- Rewrote `ansys_validation/export_ymatrix_csv.py` to use the grounded 15-port
+  Maxwell G/C reports, reconstruct and Kron-reduce the 16-port matrix, and
+  export exactly four columns named `Yreal`, `Yim`, `abs_Y`, and `phase`, with
+  rows in acquisition order.
+  Removed the old sign-flip heuristic and added a warning when the source
+  conductance matrix is identically zero. No Maxwell solve or postprocessor run
+  was performed after this change.
 - AEDT v252's `ansysedtng` JSON mode executes through a gRPC wrapper. It does
   not implement `RestoreWindow()` or `OpenProject()`, so those calls were
   removed. The wrapper's `InsertDesign` signature also differs from the legacy

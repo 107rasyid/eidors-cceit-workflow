@@ -39,10 +39,11 @@ mesh-converged cross-solver validation.
    retry; a failed run may already have inserted the design and geometry.
 4. Wait for the solve and matrix export to finish. The script saves the project
    and matrix under `ansys_validation/results/`.
-5. From PowerShell at the repository root, create the 120-pair CSV:
+5. From PowerShell at the repository root, reduce the exported matrix to the
+   120 pair admittances:
 
    ```powershell
-   py .\ansys_validation\matrix_to_pairs.py
+   py .\ansys_validation\export_ymatrix_csv.py
    ```
 
 Run the script once per fresh blank project. The CLI gRPC route is not used:
@@ -54,24 +55,25 @@ Run the script once per fresh blank project. The CLI gRPC route is not used:
 Files are written to `ansys_validation/results/`:
 
 - `B6_Maxwell_ACConduction.aedt`: Maxwell project
-- `B6_Maxwell_Ymatrix.tab`: 15-by-15 complex Y matrix with electrode 16 as
-  reference
-- `B6_Maxwell_pairs_120.csv`: acquisition-order pair rows with terminal
-  voltages, complex currents/admittances, magnitude, phase, current imbalance,
-  floating-current ratio, and voltage-constraint residual
+- `B6_Maxwell_G_uS.csv`, `B6_Maxwell_C_pF.csv`: 15-by-15 grounded matrix
+  reports with electrode 16 as reference
+- `B6_Maxwell_Yre_uS.csv`, `B6_Maxwell_Yim_uS.csv`: direct complex-Y reports
+  (alternative inputs to the postprocessor)
+- `B6_Maxwell_pairs_120.csv`: 120 acquisition-order rows with only `Yreal`,
+  `Yim`, `abs_Y`, and `phase` (admittance values are S per m depth; phase is
+  degrees)
 - `maxwell_console.log`: AEDT run log
 
 The postprocessor reconstructs the 16-terminal matrix using current
-conservation, then solves each pair with `U_tx-U_rx=1 V`, zero net current on
-the other 14 terminals, and a temporary zero-mean voltage gauge. It shifts the
-voltages to `U_tx=1 V`, `U_rx=0 V` before writing the row. Pair order is
-`(1,2), (1,3), ..., (1,16), (2,3), ...`.
+conservation and Kron-reduces the 14 unselected electrodes for each pair.
+Pair order is `(1,2), (1,3), ..., (1,16), (2,3), ...`.
 
-If the AEDT export layout differs from the parser's supported 15 rows of 30
-real/imaginary values (or flat equivalent), the conversion stops and reports
-that it could not identify the matrix. In that case, keep the `.tab` file and
-adapt `matrix_to_pairs.py` to the actual export; do not manually treat an
-unparsed or malformed matrix as validated data.
+The postprocessor reads the 15-by-15 G/C reports (or direct Re(Y)/Im(Y)
+reports), reconstructs the 16-terminal matrix using current conservation, then
+Kron-reduces the 14 unselected electrodes for each pair. Its default input path
+is `ansys_validation/results/`, even when launched from the repository root.
+If Maxwell's real-conductance report is all zero, the exporter preserves zero
+and warns; it cannot recover conductive loss from the capacitance report alone.
 
 ## Validation status and limits
 
