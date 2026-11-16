@@ -11,6 +11,44 @@ Do not tune A3 to B6 and claim independent equivalence.
 The active forward workflow is manual and goal-by-goal. `run_all.m` is archived;
 the optional reconstruction demo is separate and does not change the paper workflow.
 
+## Elmer FEM validation scaffold
+
+- Added `elmer_validation/export_B6_mesh_for_elmer.m` to rebuild the explicit
+  B6 mesh through the existing Netgen/EIDORS function and export Elmer-native
+  mesh files, body/boundary maps, and the original EIDORS model for comparison.
+- The exporter uses shared parameters and currently targets the B6 coarse
+  reference (`h_int_B6=2 mm`, `h_ring_B6_coarse=0.35 mm`). `setup_paths.m` adds
+  the exporter folder to the Octave path.
+- This is mesh generation only. Elmer harmonic material laws, Robin electrode
+  contacts, floating-electrode constraints, current extraction, and numerical
+  comparison are documented in `elmer_validation/README.md` as a 16-basis-run
+  route to all 120 pair responses. Added a complete `case.sif` for basis 1
+  (electrode 1 at 1 V; all other electrode ports at 0 V through Robin
+  contacts) and GUI run instructions. The SIF has not been run or tested; no
+  Elmer solve was performed.
+- Kept a master copy at `elmer_validation/case_basis01_template.sif` because
+  ElmerGUI may regenerate or overwrite the project `case.sif` when editing or
+  saving the project. Restore the run copy from this template if needed.
+- ElmerGUI was pointed at the export folder itself and overwrote its flat
+  `mesh.*` files with an empty mesh. The reference MAT remains the source of
+  truth. Added `restore_elmer_case_from_mat.m` to reconstruct the exact saved
+  mesh records into an isolated `elmer_validation/elmer_case/mesh/` folder
+  (without re-running Netgen), and copy the basis-1 SIF into the isolated case.
+  The SIF now uses `Mesh DB "." "mesh"` for this folder layout. The reported
+  `External Conductivity` warnings are not the stopping error: `StatCurrentSolve`
+  registers that Robin-boundary keyword dynamically. Recovery has not yet been
+  run; the mesh files must be restored before the next solver attempt.
+- The first loaded-mesh solve reached assembly but returned NaN. The SIF had
+  `Variable DOFs = 2` together with `Harmonic Mode = True`; corrected all case
+  copies to one scalar DOF so the harmonic system can form the real/imaginary
+  pair internally. This correction has not yet been rerun.
+- The next harmonic run ended but solved the trivial zero field; `SaveScalars`
+  also requested a nonexistent `Potential Re` variable. Added
+  `elmer_case/case_dirichlet_check.sif` as a diagnostic-only case: fixed 1 V on
+  electrode 1 and 0 V on the others, preserving mesh/materials/frequency, to
+  isolate solver and electrode-tag behavior from the Robin CEM condition. It
+  has not been run and is not a validation result.
+
 ## Active structure
 
 - `core/`: parameters, A3/B6 meshes and solvers, pair scans, metadata.

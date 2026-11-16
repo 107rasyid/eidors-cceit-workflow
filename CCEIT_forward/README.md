@@ -50,9 +50,13 @@ Then open Octave, set the current directory to `CCEIT_forward`, and run:
 setup_paths
 ```
 
-This adds `core/`, `scripts/`, and `plots/`, starts EIDORS when needed, and
-checks NETGEN. `core/cceit_params.m` contains the shared physical and mesh
+This adds `core/`, `scripts/`, `plots/`, and `elmer_validation/`, starts EIDORS
+when needed, and checks NETGEN. `core/cceit_params.m` contains the shared physical and mesh
 parameters; outputs go to `results/`.
+
+To prepare the explicit-layer B6 mesh for an Elmer FEM validation, run
+`run('elmer_validation/export_B6_mesh_for_elmer.m')` after `setup_paths`. The
+mesh and reference MAT are written under `elmer_validation/`; see its README.
 
 ## Manual workflow: run one paper goal at a time
 
@@ -187,6 +191,8 @@ them. If results are missing, run that goal's solver stage first.
 ### Root
 
 - `setup_paths.m`: EIDORS/NETGEN setup and project paths.
+- `elmer_validation/`: B6 mesh exporter and instructions for the next Elmer
+  validation stage.
 - `arsip/manual_run_reset_20261104/run_all.m`: archived orchestrator; do not use.
 - `demo_reconstruction.m`: optional six-case A3/B6 reconstruction demo;
   helpers in `demo_reconstruction/`, generated outputs in

@@ -1,0 +1,26 @@
+Metadata for SaveScalars file: ./phi_boundary.dat
+Elmer version: 26.1
+Elmer revision: Release
+Elmer compilation date: 2026-01-23
+Solver input file: case.sif
+File started at: 2026/11/16 11:25:08
+ 
+Variables in columns of matrix: 
+   1: boundary int: potential im over bc 1
+   2: boundary int:  over bc 2
+   3: boundary int:  over bc 3
+   4: boundary int:  over bc 4
+   5: boundary int:  over bc 5
+   6: boundary int:  over bc 6
+   7: boundary int:  over bc 7
+   8: boundary int:  over bc 8
+   9: boundary int:  over bc 9
+  10: boundary int:  over bc 10
+  11: boundary int:  over bc 11
+  12: boundary int:  over bc 12
+  13: boundary int:  over bc 13
+  14: boundary int:  over bc 14
+  15: boundary int:  over bc 15
+  16: boundary int:  over bc 16
+  17: res: frequency
+  18: res: total joule heating

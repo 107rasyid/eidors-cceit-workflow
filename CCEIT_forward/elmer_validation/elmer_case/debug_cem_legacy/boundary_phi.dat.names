@@ -1,0 +1,42 @@
+Metadata for SaveScalars file: ./boundary_phi.dat
+Elmer version: 26.1
+Elmer revision: Release
+Elmer compilation date: 2026-01-23
+Solver input file: case_cem_legacy.sif
+File started at: 2026/11/16 11:49:36
+ 
+Variables in columns of matrix: 
+   1: boundary int: potential over bc 1
+   2: boundary int:  over bc 2
+   3: boundary int:  over bc 3
+   4: boundary int:  over bc 4
+   5: boundary int:  over bc 5
+   6: boundary int:  over bc 6
+   7: boundary int:  over bc 7
+   8: boundary int:  over bc 8
+   9: boundary int:  over bc 9
+  10: boundary int:  over bc 10
+  11: boundary int:  over bc 11
+  12: boundary int:  over bc 12
+  13: boundary int:  over bc 13
+  14: boundary int:  over bc 14
+  15: boundary int:  over bc 15
+  16: boundary int:  over bc 16
+  17: boundary int: potential im over bc 1
+  18: boundary int:  over bc 2
+  19: boundary int:  over bc 3
+  20: boundary int:  over bc 4
+  21: boundary int:  over bc 5
+  22: boundary int:  over bc 6
+  23: boundary int:  over bc 7
+  24: boundary int:  over bc 8
+  25: boundary int:  over bc 9
+  26: boundary int:  over bc 10
+  27: boundary int:  over bc 11
+  28: boundary int:  over bc 12
+  29: boundary int:  over bc 13
+  30: boundary int:  over bc 14
+  31: boundary int:  over bc 15
+  32: boundary int:  over bc 16
+  33: res: frequency
+  34: res: total joule heating

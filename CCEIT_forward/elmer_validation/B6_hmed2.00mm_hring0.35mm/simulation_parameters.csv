@@ -1,0 +1,8 @@
+parameter,value,unit
+frequency,500000,Hz
+transmitter_voltage,1,V
+domain_radius,0.053,m
+layer_thickness,0.002,m
+model_depth,1,m
+electrode_contact_impedance,0.01,Ohm.m
+time_convention,e^(+j*omega*t),text

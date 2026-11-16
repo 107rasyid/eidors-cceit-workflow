@@ -1,0 +1,62 @@
+ELMER SOLVER (v 26.1) STARTED AT: 2026/11/16 12:01:25
+ParCommInit: Initialize #PEs: 1
+MAIN: 
+MAIN: =============================================================
+MAIN: ElmerSolver finite element software, Welcome!
+MAIN: This program is free software licensed under (L)GPL
+MAIN: Copyright 1st April 1995 - , CSC - IT Center for Science Ltd.
+MAIN: Webpage http://www.csc.fi/elmer, Email elmeradm@csc.fi
+MAIN: Version: 26.1-devel (Rev: Release, Compiled: 2026-01-23)
+MAIN:  Running one task without MPI parallelization.
+MAIN:  Running with just one thread per task.
+MAIN:  Lua interpreter linked in.
+MAIN: =============================================================
+MAIN: 
+MAIN: 
+MAIN: -------------------------------------
+MAIN: Reading Model: basis_06.sif
+LoadInputFile: Scanning input file: basis_06.sif
+LoadInputFile: Scanning only size info
+LoadInputFile: First time visiting
+LoadInputFile: Reading base load of sif file
+LoadInputFile: Loading input file: basis_06.sif
+LoadInputFile: Reading base load of sif file
+LoadInputFile: Number of BCs: 16
+LoadInputFile: Number of Body Forces: 0
+LoadInputFile: Number of Initial Conditions: 0
+LoadInputFile: Number of Materials: 2
+LoadInputFile: Number of Equations: 1
+LoadInputFile: Number of Solvers: 1
+LoadInputFile: Number of Bodies: 2
+ElmerAsciiMesh: Base mesh name: ./mesh
+LoadMesh: Elapsed REAL time:     0.0870 (s)
+MAIN: -------------------------------------
+AddVtuOutputSolverHack: Adding ResultOutputSolver to write VTU output in file: basis_06
+OptimizeBandwidth: Initial bandwidth for harmonic current conduction: 2666
+OptimizeBandwidth: Optimized bandwidth for harmonic current conduction: 229
+MAIN: Number of timesteps to be saved: 1
+MAIN: 
+MAIN: -------------------------------------
+MAIN:  Steady state iteration:            1
+MAIN: -------------------------------------
+MAIN: 
+StatCurrentSolve: -------------------------------------
+StatCurrentSolve: STAT CURRENT SOLVER:
+StatCurrentSolve: -------------------------------------
+StatCurrentSolve:  Assembly (s)          :   3.9999999999999980E-002
+ChangeToHarmonicSystem: Frequency value:    0.500E+06
+ComputeChange: NS (ITER=1) (NRM,RELC): ( 0.10046711      2.0000000     ) :: harmonic current conduction
+StatCurrentSolve:  Solve (s)             :   4.9999999999999989E-002
+StatCurrentSolve:  Total Heating Power   :   0.0000000000000000
+ComputeChange: SS (ITER=1) (NRM,RELC): ( 0.14208195      2.0000000     ) :: harmonic current conduction
+ResultOutputSolver: -------------------------------------
+ResultOutputSolver: Saving with prefix: basis_06
+CreateListForSaving: Field Variables for Saving
+ResultOutputSolver: Saving in unstructured VTK XML (.vtu) format
+VtuOutputSolver: Saving results in VTK XML format with prefix: basis_06
+VtuOutputSolver: Saving number of partitions: 1
+ResultOutputSolver: -------------------------------------
+MAIN: *** Elmer Solver: ALL DONE ***
+MAIN: The end
+SOLVER TOTAL TIME(CPU,REAL):         0.47        0.47
+ELMER SOLVER FINISHED AT: 2026/11/16 12:01:26

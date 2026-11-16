@@ -1,0 +1,173 @@
+Header
+  CHECK KEYWORDS Warn
+  Mesh DB "." "mesh"
+  Results Directory ""
+End
+
+Simulation
+  Max Output Level = 5
+  Coordinate System = "Cartesian 2D"
+  Simulation Type = Steady State
+  Steady State Max Iterations = 1
+  Output Intervals = 1
+  Angular Frequency = 3141592.653589793
+  Post File = "harmonic_epscontrast_check.vtu"
+End
+
+Constants
+  Permittivity of Vacuum = 8.8541878128e-12
+End
+
+Equation 1
+  Name = "Harmonic current conduction"
+  Active Solvers(1) = 1
+End
+
+Solver 1
+  Exec Solver = Always
+  Equation = "Harmonic current conduction"
+  Procedure = "StatCurrentSolve" "StatCurrentSolver"
+  Variable = Potential
+  Variable DOFs = 1
+  Harmonic Mode = Logical True
+  Calculate Volume Current = Logical True
+  Calculate Joule Heating = Logical False
+  Linear System Solver = Direct
+  Linear System Direct Method = UMFPACK
+End
+
+Material 1
+  Name = "Medium"
+  Electric Conductivity = Real 0.025
+  Relative Permittivity = Real 80
+End
+
+Material 2
+  Name = "Ring epsilon contrast with nonzero sigma"
+  Electric Conductivity = Real 0.025
+  Relative Permittivity = Real 3
+End
+
+Body 1
+  Target Bodies(1) = 1
+  Equation = 1
+  Material = 1
+End
+
+Body 2
+  Target Bodies(1) = 2
+  Equation = 1
+  Material = 2
+End
+Boundary Condition 1
+  Name = "Electrode 1"
+  Target Boundaries(1) = 11
+  Potential 1 = Real 1
+  Potential 2 = Real 0
+End
+
+Boundary Condition 2
+  Name = "Electrode 2"
+  Target Boundaries(1) = 12
+  Potential 1 = Real 0
+  Potential 2 = Real 0
+End
+
+Boundary Condition 3
+  Name = "Electrode 3"
+  Target Boundaries(1) = 13
+  Potential 1 = Real 0
+  Potential 2 = Real 0
+End
+
+Boundary Condition 4
+  Name = "Electrode 4"
+  Target Boundaries(1) = 14
+  Potential 1 = Real 0
+  Potential 2 = Real 0
+End
+
+Boundary Condition 5
+  Name = "Electrode 5"
+  Target Boundaries(1) = 15
+  Potential 1 = Real 0
+  Potential 2 = Real 0
+End
+
+Boundary Condition 6
+  Name = "Electrode 6"
+  Target Boundaries(1) = 16
+  Potential 1 = Real 0
+  Potential 2 = Real 0
+End
+
+Boundary Condition 7
+  Name = "Electrode 7"
+  Target Boundaries(1) = 17
+  Potential 1 = Real 0
+  Potential 2 = Real 0
+End
+
+Boundary Condition 8
+  Name = "Electrode 8"
+  Target Boundaries(1) = 18
+  Potential 1 = Real 0
+  Potential 2 = Real 0
+End
+
+Boundary Condition 9
+  Name = "Electrode 9"
+  Target Boundaries(1) = 19
+  Potential 1 = Real 0
+  Potential 2 = Real 0
+End
+
+Boundary Condition 10
+  Name = "Electrode 10"
+  Target Boundaries(1) = 20
+  Potential 1 = Real 0
+  Potential 2 = Real 0
+End
+
+Boundary Condition 11
+  Name = "Electrode 11"
+  Target Boundaries(1) = 21
+  Potential 1 = Real 0
+  Potential 2 = Real 0
+End
+
+Boundary Condition 12
+  Name = "Electrode 12"
+  Target Boundaries(1) = 22
+  Potential 1 = Real 0
+  Potential 2 = Real 0
+End
+
+Boundary Condition 13
+  Name = "Electrode 13"
+  Target Boundaries(1) = 23
+  Potential 1 = Real 0
+  Potential 2 = Real 0
+End
+
+Boundary Condition 14
+  Name = "Electrode 14"
+  Target Boundaries(1) = 24
+  Potential 1 = Real 0
+  Potential 2 = Real 0
+End
+
+Boundary Condition 15
+  Name = "Electrode 15"
+  Target Boundaries(1) = 25
+  Potential 1 = Real 0
+  Potential 2 = Real 0
+End
+
+Boundary Condition 16
+  Name = "Electrode 16"
+  Target Boundaries(1) = 26
+  Potential 1 = Real 0
+  Potential 2 = Real 0
+End
+

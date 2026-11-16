@@ -17,6 +17,7 @@ addpath(fullfile(project_root, 'core'));
 addpath(fullfile(project_root, 'scripts'));
 addpath(fullfile(project_root, 'plots'));
 addpath(fullfile(project_root, 'demo_reconstruction'));
+addpath(fullfile(project_root, 'elmer_validation'));
 
 startup_file = fullfile(eidors_root, 'startup.m');
 if exist(startup_file, 'file') ~= 2
