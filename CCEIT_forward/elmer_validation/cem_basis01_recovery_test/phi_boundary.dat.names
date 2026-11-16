@@ -1,0 +1,9 @@
+Metadata for SaveScalars file: ./phi_boundary.dat
+Elmer version: 26.1
+Elmer revision: Release
+Elmer compilation date: 2026-01-23
+Solver input file: case_robin_dc_control.sif
+File started at: 2026/11/16 13:59:02
+ 
+Variables in columns of matrix: 
+   1: res: total joule heating

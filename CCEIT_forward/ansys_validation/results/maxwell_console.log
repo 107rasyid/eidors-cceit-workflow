@@ -1,0 +1,333 @@
+ 
+Ansys Electronics Desktop Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\Program Files\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtng.exe
+Batch Script: C:/Users/user/Documents/GitHub/eidors-v3.12/CCEIT_forward/ansys_validation/run_b6_maxwell.py
+Starting Batch Run: 4:32:20 PM  Nov 16, 2026
+Running as user : RASYID\user
+Temp directory: C:\temp
+[info] Creating directory: C:/Temp/ansoft/
+Project directory: C:\Users\user\Documents\Ansoft
+[info] Native gRPC Server started at port: 50051.
+Unable to insert Design = B6_ACConduction.
+[Exiting application]
+[info] Unable to insert Design = B6_ACConduction.
+ 
+Ansys Electronics Desktop Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\Program Files\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtng.exe
+Batch Script: C:/Users/user/Documents/GitHub/eidors-v3.12/CCEIT_forward/ansys_validation/run_b6_maxwell.py
+Starting Batch Run: 4:49:34 PM  Nov 16, 2026
+Running as user : RASYID\user
+Temp directory: C:\temp
+Project directory: C:\Users\user\Documents\Ansoft
+[info] Native gRPC Server started at port: 50051.
+[info] C:/Program Files/ANSYS Inc/ANSYS Student/v252/AnsysEM/gRPCFiles/API/
+[error] Traceback (most recent call last):
+
+[error]   File "C:/Users/user/Documents/GitHub/eidors-v3.12/CCEIT_forward/ansys_validation/run_b6_maxwell.py", line 179, in <module>
+
+[error]     main()
+
+[error]   File "C:/Users/user/Documents/GitHub/eidors-v3.12/CCEIT_forward/ansys_validation/run_b6_maxwell.py", line 63, in main
+
+[error]     raise Exception("Create one blank Maxwell 2D AC Conduction design and save it as: " + template_path)
+
+[error] Exception: Create one blank Maxwell 2D AC Conduction design and save it as: C:\Users\user\Documents\GitHub\eidors-v3.12\CCEIT_forward\ansys_validation\results\blank_check.aedt
+
+Stopping Batch Run: 4:49:48 PM  Nov 16, 2026
+ 
+Ansys Electronics Desktop Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\Program Files\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtng.exe
+Batch Script: C:/Users/user/Documents/GitHub/eidors-v3.12/CCEIT_forward/ansys_validation/run_b6_maxwell.py
+Starting Batch Run: 5:00:53 PM  Nov 16, 2026
+Running as user : RASYID\user
+Temp directory: C:\temp
+Project directory: C:\Users\user\Documents\Ansoft
+[info] Native gRPC Server started at port: 50051.
+[info] C:/Program Files/ANSYS Inc/ANSYS Student/v252/AnsysEM/gRPCFiles/API/
+[error] Traceback (most recent call last):
+
+[error]   File "C:/Users/user/Documents/GitHub/eidors-v3.12/CCEIT_forward/ansys_validation/run_b6_maxwell.py", line 192, in <module>
+
+[error]     main()
+
+[error]   File "C:/Users/user/Documents/GitHub/eidors-v3.12/CCEIT_forward/ansys_validation/run_b6_maxwell.py", line 79, in main
+
+[error]     oDesktop.RestoreWindow()
+
+[error]   File "C:\Program Files/ANSYS Inc/ANSYS Student/v252/AnsysEM/gRPCFiles/API\aedt\desktop\desktopwrapper.py", line 139, in RestoreWindow
+
+[error]     response, call = self.mDesktopStub.RestoreWindow.with_call(request, metadata=self.context)
+
+[error]   File "C:\Program Files\ANSYS Inc\ANSYS Student\v252\AnsysEM\commonfiles\CPython\3_10\winx64\Release\python\lib\site-packages\grpc\_channel.py", line 1178, in with_call
+
+[error]     return _end_unary_response_blocking(state, call, True, None)
+
+[error]   File "C:\Program Files\ANSYS Inc\ANSYS Student\v252\AnsysEM\commonfiles\CPython\3_10\winx64\Release\python\lib\site-packages\grpc\_channel.py", line 1004, in _end_unary_response_blocking
+
+[error]     raise _InactiveRpcError(state)  # pytype: disable=not-instantiable
+
+[error] grpc._channel._InactiveRpcError: <_InactiveRpcError of RPC that terminated with:
+	status = StatusCode.UNIMPLEMENTED
+	details = ""
+	debug_error_string = "UNKNOWN:Error received from peer ipv4:127.0.0.1:50051 {grpc_message:"", grpc_status:12, created_time:"2026-11-16T10:00:55.4921599+00:00"}"
+>
+
+Stopping Batch Run: 5:00:55 PM  Nov 16, 2026
+ 
+Ansys Electronics Desktop Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\Program Files\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtng.exe
+Batch Script: C:/Users/user/Documents/GitHub/eidors-v3.12/CCEIT_forward/ansys_validation/run_b6_maxwell.py
+Starting Batch Run: 5:01:53 PM  Nov 16, 2026
+Running as user : RASYID\user
+Temp directory: C:\temp
+Project directory: C:\Users\user\Documents\Ansoft
+[info] Native gRPC Server started at port: 50051.
+[info] C:/Program Files/ANSYS Inc/ANSYS Student/v252/AnsysEM/gRPCFiles/API/
+[error] Traceback (most recent call last):
+
+[error]   File "C:/Users/user/Documents/GitHub/eidors-v3.12/CCEIT_forward/ansys_validation/run_b6_maxwell.py", line 191, in <module>
+
+[error]     main()
+
+[error]   File "C:/Users/user/Documents/GitHub/eidors-v3.12/CCEIT_forward/ansys_validation/run_b6_maxwell.py", line 79, in main
+
+[error]     oProject = oDesktop.OpenProject(template_path)
+
+[error]   File "C:\Program Files/ANSYS Inc/ANSYS Student/v252/AnsysEM/gRPCFiles/API\aedt\desktop\desktopwrapper.py", line 44, in OpenProject
+
+[error]     response, call = self.mDesktopStub.OpenProject.with_call(request, metadata=self.context)
+
+[error]   File "C:\Program Files\ANSYS Inc\ANSYS Student\v252\AnsysEM\commonfiles\CPython\3_10\winx64\Release\python\lib\site-packages\grpc\_channel.py", line 1178, in with_call
+
+[error]     return _end_unary_response_blocking(state, call, True, None)
+
+[error]   File "C:\Program Files\ANSYS Inc\ANSYS Student\v252\AnsysEM\commonfiles\CPython\3_10\winx64\Release\python\lib\site-packages\grpc\_channel.py", line 1004, in _end_unary_response_blocking
+
+[error]     raise _InactiveRpcError(state)  # pytype: disable=not-instantiable
+
+[error] grpc._channel._InactiveRpcError: <_InactiveRpcError of RPC that terminated with:
+	status = StatusCode.UNIMPLEMENTED
+	details = ""
+	debug_error_string = "UNKNOWN:Error received from peer ipv4:127.0.0.1:50051 {grpc_message:"", grpc_status:12, created_time:"2026-11-16T10:01:55.8865835+00:00"}"
+>
+
+Stopping Batch Run: 5:01:56 PM  Nov 16, 2026
+ 
+Ansys Electronics Desktop Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\Program Files\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtng.exe
+Batch Script: C:/Users/user/Documents/GitHub/eidors-v3.12/CCEIT_forward/ansys_validation/run_b6_maxwell.py
+Starting Batch Run: 5:04:47 PM  Nov 16, 2026
+Running as user : RASYID\user
+Temp directory: C:\temp
+[error] C:/Temp/ansoft/ is not a valid directory because it is read only.
+Stopping Batch Run: 5:04:48 PM  Nov 16, 2026
+ 
+Ansys Electronics Desktop Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\Program Files\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtng.exe
+Batch Script: C:/Users/user/Documents/GitHub/eidors-v3.12/CCEIT_forward/ansys_validation/run_b6_maxwell.py
+Starting Batch Run: 5:05:40 PM  Nov 16, 2026
+Running as user : RASYID\user
+Temp directory: C:\temp
+[error] C:/Temp/ansoft/ is not a valid directory because it is read only.
+Stopping Batch Run: 5:05:41 PM  Nov 16, 2026
+ 
+Ansys Electronics Desktop Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\Program Files\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtng.exe
+Batch Script: C:/Users/user/Documents/GitHub/eidors-v3.12/CCEIT_forward/ansys_validation/run_b6_maxwell.py
+Starting Batch Run: 5:06:03 PM  Nov 16, 2026
+Running as user : RASYID\user
+Temp directory: C:\temp
+[error] C:/Temp/ansoft/ is not a valid directory because it is read only.
+Stopping Batch Run: 5:06:04 PM  Nov 16, 2026
+ 
+Ansys Electronics Desktop Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\Program Files\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtng.exe
+Batch Script: C:/Users/user/Documents/GitHub/eidors-v3.12/CCEIT_forward/ansys_validation/run_b6_maxwell.py
+Starting Batch Run: 5:06:56 PM  Nov 16, 2026
+Running as user : RASYID\user
+Temp directory: C:\temp
+[error] C:/Temp/ansoft/ is not a valid directory because it is read only.
+Stopping Batch Run: 5:06:57 PM  Nov 16, 2026
+ 
+Ansys Electronics Desktop Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\Program Files\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtng.exe
+Batch Script: C:/Users/user/Documents/GitHub/eidors-v3.12/CCEIT_forward/ansys_validation/run_b6_maxwell.py
+Starting Batch Run: 5:07:50 PM  Nov 16, 2026
+Running as user : RASYID\user
+Temp directory: C:\temp
+[error] C:/Temp/ansoft/ is not a valid directory because it is read only.
+Stopping Batch Run: 5:07:50 PM  Nov 16, 2026
+ 
+Ansys Electronics Desktop Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\Program Files\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtng.exe
+Batch Script: C:/Users/user/Documents/GitHub/eidors-v3.12/CCEIT_forward/ansys_validation/run_b6_maxwell.py
+Starting Batch Run: 5:09:17 PM  Nov 16, 2026
+Running as user : RASYID\user
+Temp directory: C:\temp
+[error] C:/Temp/ansoft/ is not a valid directory because it is read only.
+Stopping Batch Run: 5:09:18 PM  Nov 16, 2026
+ 
+Ansys Electronics Desktop Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\Program Files\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtng.exe
+Batch Script: C:/Users/user/Documents/GitHub/eidors-v3.12/CCEIT_forward/ansys_validation/run_b6_maxwell.py
+Starting Batch Run: 5:12:10 PM  Nov 16, 2026
+Running as user : RASYID\user
+Temp directory: C:\temp
+[error] C:/Temp/ansoft/ is not a valid directory because it is read only.
+Stopping Batch Run: 5:12:11 PM  Nov 16, 2026
+ 
+Ansys Electronics Desktop Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\Program Files\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtng.exe
+Batch Script: C:/Users/user/Documents/GitHub/eidors-v3.12/CCEIT_forward/ansys_validation/run_b6_maxwell.py
+Starting Batch Run: 5:12:40 PM  Nov 16, 2026
+Running as user : RASYID\user
+Temp directory: C:\Users\user\Documents\GitHub\eidors-v3.12\CCEIT_forward\ansys_validation\results\aedt_temp
+Project directory: C:\Users\user\Documents\Ansoft
+[info] Native gRPC Server started at port: 50051.
+[info] C:/Program Files/ANSYS Inc/ANSYS Student/v252/AnsysEM/gRPCFiles/API/
+[error] Traceback (most recent call last):
+
+[error]   File "C:/Users/user/Documents/GitHub/eidors-v3.12/CCEIT_forward/ansys_validation/run_b6_maxwell.py", line 175, in <module>
+
+[error]     main()
+
+[error]   File "C:/Users/user/Documents/GitHub/eidors-v3.12/CCEIT_forward/ansys_validation/run_b6_maxwell.py", line 66, in main
+
+[error]     oProject = oDesktop.NewProject("B6_Maxwell_ACConduction")
+
+[error]   File "C:\Program Files/ANSYS Inc/ANSYS Student/v252/AnsysEM/gRPCFiles/API\aedt\desktop\desktopwrapper.py", line 63, in NewProject
+
+[error]     response, call = self.mDesktopStub.NewProject.with_call(request, metadata=self.context)
+
+[error]   File "C:\Program Files\ANSYS Inc\ANSYS Student\v252\AnsysEM\commonfiles\CPython\3_10\winx64\Release\python\lib\site-packages\grpc\_channel.py", line 1178, in with_call
+
+[error]     return _end_unary_response_blocking(state, call, True, None)
+
+[error]   File "C:\Program Files\ANSYS Inc\ANSYS Student\v252\AnsysEM\commonfiles\CPython\3_10\winx64\Release\python\lib\site-packages\grpc\_channel.py", line 1004, in _end_unary_response_blocking
+
+[error]     raise _InactiveRpcError(state)  # pytype: disable=not-instantiable
+
+[error] grpc._channel._InactiveRpcError: <_InactiveRpcError of RPC that terminated with:
+	status = StatusCode.UNIMPLEMENTED
+	details = ""
+	debug_error_string = "UNKNOWN:Error received from peer ipv4:127.0.0.1:50051 {created_time:"2026-11-16T10:12:42.6325939+00:00", grpc_status:12, grpc_message:""}"
+>
+
+Stopping Batch Run: 5:12:42 PM  Nov 16, 2026
+ 
+Ansys Electronics Desktop Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\Program Files\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtng.exe
+Batch Script: C:/Users/user/Documents/GitHub/eidors-v3.12/CCEIT_forward/ansys_validation/run_b6_maxwell.py
+Starting Batch Run: 5:15:21 PM  Nov 16, 2026
+Running as user : RASYID\user
+Temp directory: C:\Users\user\Documents\GitHub\eidors-v3.12\CCEIT_forward\ansys_validation\results\aedt_temp
+Project directory: C:\Users\user\Documents\Ansoft
+[info] Native gRPC Server started at port: 50051.
+[info] C:/Program Files/ANSYS Inc/ANSYS Student/v252/AnsysEM/gRPCFiles/API/
+[error] Traceback (most recent call last):
+
+[error]   File "C:/Users/user/Documents/GitHub/eidors-v3.12/CCEIT_forward/ansys_validation/run_b6_maxwell.py", line 175, in <module>
+
+[error]     main()
+
+[error]   File "C:/Users/user/Documents/GitHub/eidors-v3.12/CCEIT_forward/ansys_validation/run_b6_maxwell.py", line 66, in main
+
+[error]     oProject = oDesktop.NewProject("B6_Maxwell_ACConduction")
+
+[error]   File "C:\Program Files/ANSYS Inc/ANSYS Student/v252/AnsysEM/gRPCFiles/API\aedt\desktop\desktopwrapper.py", line 63, in NewProject
+
+[error]     response, call = self.mDesktopStub.NewProject.with_call(request, metadata=self.context)
+
+[error]   File "C:\Program Files\ANSYS Inc\ANSYS Student\v252\AnsysEM\commonfiles\CPython\3_10\winx64\Release\python\lib\site-packages\grpc\_channel.py", line 1178, in with_call
+
+[error]     return _end_unary_response_blocking(state, call, True, None)
+
+[error]   File "C:\Program Files\ANSYS Inc\ANSYS Student\v252\AnsysEM\commonfiles\CPython\3_10\winx64\Release\python\lib\site-packages\grpc\_channel.py", line 1004, in _end_unary_response_blocking
+
+[error]     raise _InactiveRpcError(state)  # pytype: disable=not-instantiable
+
+[error] grpc._channel._InactiveRpcError: <_InactiveRpcError of RPC that terminated with:
+	status = StatusCode.UNIMPLEMENTED
+	details = ""
+	debug_error_string = "UNKNOWN:Error received from peer ipv4:127.0.0.1:50051 {grpc_message:"", grpc_status:12, created_time:"2026-11-16T10:15:37.6033913+00:00"}"
+>
+
+Stopping Batch Run: 5:15:37 PM  Nov 16, 2026
+ 
+Ansys Electronics Desktop Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\Program Files\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtng.exe
+Batch Script: C:/Users/user/Documents/GitHub/eidors-v3.12/CCEIT_forward/ansys_validation/run_b6_maxwell.py
+Starting Batch Run: 5:16:09 PM  Nov 16, 2026
+Running as user : RASYID\user
+Temp directory: C:\Users\user\Documents\GitHub\eidors-v3.12\CCEIT_forward\ansys_validation\results\aedt_temp
+Project directory: C:\Users\user\Documents\Ansoft
+[info] Native gRPC Server started at port: 50051.
+[info] C:/Program Files/ANSYS Inc/ANSYS Student/v252/AnsysEM/gRPCFiles/API/
+[error] Traceback (most recent call last):
+
+[error]   File "C:/Users/user/Documents/GitHub/eidors-v3.12/CCEIT_forward/ansys_validation/run_b6_maxwell.py", line 177, in <module>
+
+[error]     main()
+
+[error]   File "C:/Users/user/Documents/GitHub/eidors-v3.12/CCEIT_forward/ansys_validation/run_b6_maxwell.py", line 66, in main
+
+[error]     oProject = oDesktop.GetActiveProject()
+
+[error]   File "C:\Program Files/ANSYS Inc/ANSYS Student/v252/AnsysEM/gRPCFiles/API\aedt\desktop\desktopwrapper.py", line 23, in GetActiveProject
+
+[error]     response, call = self.mDesktopStub.GetActiveProject.with_call(request, metadata=self.context)
+
+[error]   File "C:\Program Files\ANSYS Inc\ANSYS Student\v252\AnsysEM\commonfiles\CPython\3_10\winx64\Release\python\lib\site-packages\grpc\_channel.py", line 1178, in with_call
+
+[error]     return _end_unary_response_blocking(state, call, True, None)
+
+[error]   File "C:\Program Files\ANSYS Inc\ANSYS Student\v252\AnsysEM\commonfiles\CPython\3_10\winx64\Release\python\lib\site-packages\grpc\_channel.py", line 1004, in _end_unary_response_blocking
+
+[error]     raise _InactiveRpcError(state)  # pytype: disable=not-instantiable
+
+[error] grpc._channel._InactiveRpcError: <_InactiveRpcError of RPC that terminated with:
+	status = StatusCode.UNIMPLEMENTED
+	details = ""
+	debug_error_string = "UNKNOWN:Error received from peer ipv4:127.0.0.1:50051 {grpc_message:"", grpc_status:12, created_time:"2026-11-16T10:16:12.3179094+00:00"}"
+>
+
+Stopping Batch Run: 5:16:12 PM  Nov 16, 2026
+ 
+Ansys Electronics Desktop Version 2025.2.4, Build: 2025-11-06 17:01:32
+Location: C:\Program Files\ANSYS Inc\ANSYS Student\v252\AnsysEM\ansysedtng.exe
+Batch Script: C:/Users/user/Documents/GitHub/eidors-v3.12/CCEIT_forward/ansys_validation/run_b6_maxwell.py
+Starting Batch Run: 5:17:57 PM  Nov 16, 2026
+Running as user : RASYID\user
+Temp directory: C:\Users\user\Documents\GitHub\eidors-v3.12\CCEIT_forward\ansys_validation\results\aedt_temp
+Project directory: C:\Users\user\Documents\Ansoft
+[info] Native gRPC Server started at port: 50051.
+[info] C:/Program Files/ANSYS Inc/ANSYS Student/v252/AnsysEM/gRPCFiles/API/
+[error] Traceback (most recent call last):
+
+[error]   File "C:/Users/user/Documents/GitHub/eidors-v3.12/CCEIT_forward/ansys_validation/run_b6_maxwell.py", line 178, in <module>
+
+[error]     main()
+
+[error]   File "C:/Users/user/Documents/GitHub/eidors-v3.12/CCEIT_forward/ansys_validation/run_b6_maxwell.py", line 67, in main
+
+[error]     oProject = oDesktop.SetActiveProjectByPath(template_path)
+
+[error]   File "C:\Program Files/ANSYS Inc/ANSYS Student/v252/AnsysEM/gRPCFiles/API\aedt\desktop\desktopwrapper.py", line 262, in SetActiveProjectByPath
+
+[error]     response, call = self.mDesktopStub.SetActiveProjectByPath.with_call(request, metadata=self.context)
+
+[error]   File "C:\Program Files\ANSYS Inc\ANSYS Student\v252\AnsysEM\commonfiles\CPython\3_10\winx64\Release\python\lib\site-packages\grpc\_channel.py", line 1178, in with_call
+
+[error]     return _end_unary_response_blocking(state, call, True, None)
+
+[error]   File "C:\Program Files\ANSYS Inc\ANSYS Student\v252\AnsysEM\commonfiles\CPython\3_10\winx64\Release\python\lib\site-packages\grpc\_channel.py", line 1004, in _end_unary_response_blocking
+
+[error]     raise _InactiveRpcError(state)  # pytype: disable=not-instantiable
+
+[error] grpc._channel._InactiveRpcError: <_InactiveRpcError of RPC that terminated with:
+	status = StatusCode.UNIMPLEMENTED
+	details = ""
+	debug_error_string = "UNKNOWN:Error received from peer ipv4:127.0.0.1:50051 {grpc_message:"", grpc_status:12, created_time:"2026-11-16T10:17:59.5298819+00:00"}"
+>
+
+Stopping Batch Run: 5:17:59 PM  Nov 16, 2026

@@ -124,6 +124,10 @@ This is essential for the reproducibility claim.
   │   └── case_basis01_template.sif  ← backup master in case GUI overwrites case.sif
   │   └── elmer_case/                 ← isolated GUI project with mesh subfolder
   │       └── case_dirichlet_check.sif  ← diagnostic only; not the CEM validation case
+  ├── femm_validation/                ← optional FEMM Current Flow cross-solver check
+  │   └── run_b6_femm.py / README.md   ← reads saved B6 boundary geometry; FEMM remeshes interiors
+  ├── ansys_validation/               ← experimental Maxwell AC Conduction cross-solver check
+  │   └── run_b6_maxwell.ps1 / run_b6_maxwell.py / matrix_to_pairs.py / README.md
   ├── results/                      ← MAT, CSV, PNG, and run log outputs
   └── arsip/                        ← superseded, exploratory, and out-of-scope code
   └── demo_reconstruction/           ← demo-only reconstruction helpers
@@ -193,6 +197,10 @@ The paper is 5–6 pages, IEEE format. The code supports:
 
 If the user asks to implement something not in this mapping,
 ask which section it supports. If none, it's likely OUT of scope.
+
+The user explicitly requested a separate FEMM cross-solver validation workflow.
+Keep it isolated under `femm_validation/`; do not change the EIDORS solver,
+active model builders, or paper results as part of that workflow.
 
 ## WHEN IN DOUBT
 

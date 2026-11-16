@@ -1,0 +1,5 @@
+﻿{
+    "monitor":  true,
+    "runscriptandexit":  "C:\\Users\\user\\Documents\\GitHub\\eidors-v3.12\\CCEIT_forward\\ansys_validation\\run_b6_maxwell.py",
+    "logfile":  "C:\\Users\\user\\Documents\\GitHub\\eidors-v3.12\\CCEIT_forward\\ansys_validation\\results\\maxwell_console.log"
+}

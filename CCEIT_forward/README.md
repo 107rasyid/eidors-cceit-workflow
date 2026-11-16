@@ -58,6 +58,11 @@ To prepare the explicit-layer B6 mesh for an Elmer FEM validation, run
 `run('elmer_validation/export_B6_mesh_for_elmer.m')` after `setup_paths`. The
 mesh and reference MAT are written under `elmer_validation/`; see its README.
 
+An experimental Maxwell validation folder is at `ansys_validation/`. One
+PowerShell command builds the explicit-layer case, solves a terminal matrix,
+and attempts to reduce it to 120 pair responses. The Maxwell workflow is
+untested and not numerically validated; see its README for limitations.
+
 ## Manual workflow: run one paper goal at a time
 
 `run_all.m` is archived. Start with Goal 1 only, inspect the saved numbers, and
@@ -193,6 +198,9 @@ them. If results are missing, run that goal's solver stage first.
 - `setup_paths.m`: EIDORS/NETGEN setup and project paths.
 - `elmer_validation/`: B6 mesh exporter and instructions for the next Elmer
   validation stage.
+- `ansys_validation/`: experimental Maxwell 2D AC Conduction builder, terminal
+  launcher, and matrix-to-120-pairs postprocessor; untested and not yet
+  numerically validated.
 - `arsip/manual_run_reset_20261104/run_all.m`: archived orchestrator; do not use.
 - `demo_reconstruction.m`: optional six-case A3/B6 reconstruction demo;
   helpers in `demo_reconstruction/`, generated outputs in
@@ -255,3 +263,12 @@ by a text editor during cleanup. Superseded code remains under `arsip/`.
    insufficient if geometry or physics changed without documentation.
 5. Use Octave for the project runs and update this file and `PROGRESS.md` when
    adding or retiring scripts.
+## Optional FEMM cross-solver check
+
+The separate `femm_validation/` folder contains a pyFEMM script for recreating
+the explicit-layer B6 forward model in FEMM Current Flow. It keeps the Netgen
+B6 boundary polylines and electrode IDs but FEMM/Triangle remeshes the interior;
+the script first supports one pair, then all 120 pairs. See
+`femm_validation/README.md` for setup, commands, and the ideal-contact caveat.
+This optional validation does not alter the EIDORS workflow or its results.
+

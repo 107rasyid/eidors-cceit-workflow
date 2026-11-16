@@ -49,6 +49,54 @@ the optional reconstruction demo is separate and does not change the paper workf
   isolate solver and electrode-tag behavior from the Robin CEM condition. It
   has not been run and is not a validation result.
 
+## Maxwell validation scaffold
+
+- Added `ansys_validation/` for a separate Maxwell 2D AC Conduction comparison
+  of explicit-layer B6. Reference parameters and saved geometry are available
+  under the Elmer B6 export folder.
+- The workstation's ANSYS Student v252 installation contains
+  `AnsysEM/ansysedtng.exe`. Maxwell supports command-line scripting and AC
+  conduction admittance matrices; a reduced terminal matrix can represent the
+  zero-current constraints on unselected electrodes.
+- Added `ansys_validation/run_b6_maxwell.ps1`, the embedded AEDT model script
+  `run_b6_maxwell.py`, and standard-Python postprocessor `matrix_to_pairs.py`.
+  The model constructs a 16-electrode explicit-ring approximation, sets depth
+  to 1 m, assigns a thin resistive contact sector, and exports a grounded
+  15-port Y matrix. The postprocessor reconstructs the 16-terminal matrix and
+  reduces it to the 120 pair responses with the other 14 electrodes at zero
+  net current.
+- The one-command workflow is documented in `ansys_validation/README.md`.
+  Maxwell remeshes the geometry, so it will not share Netgen element
+  connectivity; the thin contact sector only approximates EIDORS CEM. The AEDT
+  geometry, matrix export, postprocessor parsing, and one-pair numerical
+  comparison have not been run. This is an implementation candidate, not a
+  completed cross-solver validation.
+- The PowerShell launcher stops if the current run does not create/update the
+  Y-matrix file, instead of passing a missing or stale file to postprocessing.
+- A GUI run created the geometry but failed when assigning `B6_YMatrix`:
+  AC Conduction requires `MatrixEntry` and `GroundSources` directly under the
+  matrix name. The prior `GCMatrix` wrapper caused Maxwell to ignore the ground
+  source. Corrected the array structure in `run_b6_maxwell.py`; this fix still
+  needs a fresh-project GUI run. Older `SetActiveProjectByPath` messages in the
+  AEDT message pane are from earlier attempts; the current script uses the
+  active GUI project.
+- The next GUI run passed matrix setup but hit the AEDT Student 2D mesh cap at
+  9,400 surface elements. Coarsening to 8/2 segments reduced it to 4,156,
+  still over the documented 2,000-triangle limit. Reduced the exploratory
+  script further to 4/1 segments and one adaptive pass. This very coarse attempt
+  has not been run and, even if it solves, is only a feasibility check rather
+  than quantitative B6 validation.
+- AEDT v252's `ansysedtng` JSON mode executes through a gRPC wrapper. It does
+  not implement `RestoreWindow()` or `OpenProject()`, so those calls were
+  removed. The wrapper's `InsertDesign` signature also differs from the legacy
+  COM API: the script now inserts the design using the gRPC signature, then
+  calls `SetSolutionType("AC Conduction", "XY")`. This path has not yet been
+  rerun.
+- Running the corrected path reached AEDT startup but failed because its
+  configured `C:\Temp\ansoft` directory is read-only. The launcher now passes
+  `TempDirectory` with AEDT's command-line batch option, pointing to the
+  writable `ansys_validation/results/aedt_temp` directory.
+
 ## Active structure
 
 - `core/`: parameters, A3/B6 meshes and solvers, pair scans, metadata.
@@ -273,3 +321,65 @@ the optional reconstruction demo is separate and does not change the paper workf
   4-by-2 canvas and its overlapping titles. Filenames include the frequency.
 - Octave was not run; use run_logged('plot_results') and export SVG from the
   open figure windows as needed.
+
+## Elmer CEM solver diagnosis (2026-11-16)
+
+- Confirmed from Elmer 26.1 `StatCurrentSolve.F90` that `StatCurrentSolver`
+  assembles Robin electrode terms from `External Conductivity` and
+  `External Potential`; a separate FEM solver plug-in is not inherently
+  required for the CEM boundary law.
+- Re-ran an isolated basis-1 case using a copy of the exact B6 mesh, tiny
+  positive ring conductivity (`1e-12 S/m`), and legacy assembly. Elmer parsed
+  the 16 boundary conditions but reported `Solution trivially zero!`; the
+  saved potential field was identically zero. Therefore no B6 current result
+  is valid yet, and the earlier Elmer comparison numbers must not be cited.
+- An attempted alternative boundary-current source was rejected by the SIF
+  parser. It is not a valid CEM solve and was not used for results.
+- Repeated the clean basis case with a confirmed `1e-12 S/m` ring, corrected
+  `SaveScalars` real-variable name, a local keyword registry, and both vector
+  and legacy assembly. Robin voltage drive still gave a trivial-zero field.
+  The same mesh/material/frequency with electrode Dirichlet voltages did solve
+  nontrivially once the ring was regularized. A boundary-current diagnostic
+  produced an extremely ill-conditioned field, consistent with the Robin
+  contact matrix not contributing in this installed build.
+- Final control: rebuilt a DC Robin case from the known-good Dirichlet SIF,
+  with positive conductivity in both regions and the same electrode tags. It
+  again reported `Solution trivially zero!`, while the Dirichlet control on the
+  same mesh solves nontrivially. This isolates the failure to the installed
+  Elmer Robin/CEM path rather than harmonic material assembly.
+- The custom CEM plug-in was not implemented in this attempt; do not claim
+  Elmer as a software platform is mathematically incapable. The evidence only
+  supports that this Elmer 26.1 workflow could not reproduce the CCEIT solve.
+- The isolated attempt is retained at
+  `elmer_validation/cem_basis01_recovery_test/` for diagnosis. Next required
+  step: identify a supported way to inject the Robin source term in this Elmer
+  build, then verify a nonzero basis field and contact-current integral before
+  generating the port matrix or 120 pairs. No custom solver plug-in has been
+  compiled, and no cross-solver validation has been completed.
+
+## FEMM Current Flow cross-solver setup
+
+- Added an isolated `femm_validation/` workflow, at the user's request, to
+  compare the explicit-layer B6 forward protocol in FEMM without touching the
+  EIDORS core or the unsuccessful Elmer solver setup.
+- `run_b6_femm.py` reads the saved B6 MAT, preserves its boundary polylines,
+  region interface, and electrode IDs, then asks FEMM/Triangle to mesh the
+  interiors at the saved B6 local target sizes. It supports a one-pair check and
+  a scripted scan of all 120 unordered pairs, with CSV currents and numerical
+  checks.
+- FEMM current-flow inputs require the `.fec` extension. The first draft used
+  `.fem` (the magnetics extension), which caused `csolv` to reject the input;
+  the script now saves the correct `.fec` type.
+- The first pyFEMM attempt used `.fem` (the magnetics extension), causing both
+  the B6 case and a tiny Current Flow control to fail at solver input loading.
+  FEMM Current Flow inputs use `.fec`; changing the saved model extension fixed
+  the failure.
+- Ran the B6 1-9 pair successfully: `|It|=4.0600e-4 A`, normalized current
+  imbalance `2.90e-12`, unselected-current ratio `0`, and terminal-voltage
+  deviation `8.88e-16 V`. Outputs are `B6_FEMM_current_flow.fec`, its `.anc`
+  solution, and `B6_FEMM_pair_check.csv` under `femm_validation/results/`.
+- FEMM uses ideal equipotential conductor contacts, while EIDORS B6 has
+  `z_el=0.01 Ohm.m`; this difference remains a limitation for interpreting
+  solver-to-solver differences. The 120-pair run has not been made.
+- See `femm_validation/README.md` for dependencies and commands. Next step is
+  to compare the 1-9 complex current with the EIDORS pair and then run `--all`.
