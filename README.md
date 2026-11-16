@@ -1,5 +1,7 @@
 # CC-EIT forward workflow
 
+Workflow folder is in CCEIT_forward for now, eidors will be deleted later (still considering make new repo or edit this one)
+
 ## Purpose and paper goals
 
 This project builds and checks a two-dimensional, 16-electrode capacitively
