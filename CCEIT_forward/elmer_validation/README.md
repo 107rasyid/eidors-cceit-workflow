@@ -1,3 +1,4 @@
+# This still doesn't work
 # Elmer FEM validation: B6 mesh export
 
 This folder prepares the explicit-layer EIDORS Model B6 mesh for an independent
