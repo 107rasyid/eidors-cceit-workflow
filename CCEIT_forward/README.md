@@ -58,10 +58,11 @@ To prepare the explicit-layer B6 mesh for an Elmer FEM validation, run
 `run('elmer_validation/export_B6_mesh_for_elmer.m')` after `setup_paths`. The
 mesh and reference MAT are written under `elmer_validation/`; see its README.
 
-An experimental Maxwell validation folder is at `ansys_validation/`. One
-PowerShell command builds the explicit-layer case, solves a terminal matrix,
-and attempts to reduce it to 120 pair responses. The Maxwell workflow is
-untested and not numerically validated; see its README for limitations.
+Optional independent-solver checks live in `femm_validation/` and
+`ansys_validation/`. Both are separate from the Octave/EIDORS workflow: they
+create their own interior meshes, so neither is an identical-element-mesh
+comparison. Their setup, commands, outputs, and physical-model limitations are
+described below and in each folder's README.
 
 ## Manual workflow: run one paper goal at a time
 
@@ -198,9 +199,9 @@ them. If results are missing, run that goal's solver stage first.
 - `setup_paths.m`: EIDORS/NETGEN setup and project paths.
 - `elmer_validation/`: B6 mesh exporter and instructions for the next Elmer
   validation stage.
-- `ansys_validation/`: experimental Maxwell 2D AC Conduction builder, terminal
-  launcher, and matrix-to-120-pairs postprocessor; untested and not yet
-  numerically validated.
+- `femm_validation/`: FEMM Current Flow cross-solver script and instructions.
+- `ansys_validation/`: Maxwell GUI model builder and 15-port matrix postprocessor;
+  use the GUI instructions below, not the experimental PowerShell launcher.
 - `arsip/manual_run_reset_20261104/run_all.m`: archived orchestrator; do not use.
 - `demo_reconstruction.m`: optional six-case A3/B6 reconstruction demo;
   helpers in `demo_reconstruction/`, generated outputs in
@@ -263,12 +264,88 @@ by a text editor during cleanup. Superseded code remains under `arsip/`.
    insufficient if geometry or physics changed without documentation.
 5. Use Octave for the project runs and update this file and `PROGRESS.md` when
    adding or retiring scripts.
-## Optional FEMM cross-solver check
+## Independent forward checks: FEMM and Maxwell
 
-The separate `femm_validation/` folder contains a pyFEMM script for recreating
-the explicit-layer B6 forward model in FEMM Current Flow. It keeps the Netgen
-B6 boundary polylines and electrode IDs but FEMM/Triangle remeshes the interior;
-the script first supports one pair, then all 120 pairs. See
-`femm_validation/README.md` for setup, commands, and the ideal-contact caveat.
-This optional validation does not alter the EIDORS workflow or its results.
+These optional workflows recreate the explicit-layer B6 forward measurement in
+other solvers. They are useful cross-checks of the forward setup, not proof of
+element-by-element equivalence: each application builds its own interior mesh.
+Neither changes the primary EIDORS results.
+
+### FEMM Current Flow
+
+`femm_validation/run_b6_femm.py` builds a FEMM Current Flow model from the
+saved Netgen B6 boundary geometry and electrode IDs. It uses the B6 reference
+mesh file
+`elmer_validation/B6_hmed2.00mm_hring0.35mm/B6_mesh_reference.mat`; create it
+first with the Elmer mesh-export step if it is absent. FEMM/Triangle remeshes
+the interior, using the saved medium/ring mesh-size targets. The model uses a
+53 mm medium radius, 2 mm explicit dielectric ring, 16 electrodes, 500 kHz,
+1 m model depth, medium properties `sigma=0.025 S/m`, `epsr=80`, and ring
+properties `sigma=0 S/m`, `epsr=3`.
+
+Install FEMM 4.2 for Windows and Python packages in the same Python environment:
+
+```powershell
+py -m pip install pyfemm numpy scipy
+```
+
+From PowerShell at the project root, test one transmitter/receiver pair first:
+
+```powershell
+py femm_validation\run_b6_femm.py --tx 1 --rx 9
+```
+
+Inspect the FEMM result and `femm_validation/results/B6_FEMM_pair_check.csv`.
+If that looks sound, run the complete set of 120 unordered pairs:
+
+```powershell
+py femm_validation\run_b6_femm.py --all
+```
+
+The full scan writes `femm_validation/results/B6_FEMM_120_pairs.csv`, a FEMM
+`.fec` model, and an `.anc` solution file. Add `--show-solver` to the one-pair command to
+show FEMM's solver console. Run only one copy at a time against the FEMM GUI.
+The script records terminal voltages, electrode currents, current imbalance,
+and floating-electrode current. FEMM's electrode contacts are ideal
+equipotentials, while EIDORS B6 uses `z_el=0.01 Ohm.m`; account for this
+difference when comparing results. See `femm_validation/README.md`.
+
+### Ansys Maxwell 2D AC Conduction
+
+The supported run path is through the **Maxwell GUI**. The CLI launcher
+`ansys_validation/run_b6_maxwell.ps1` is experimental and should not be used
+for this workflow; this AEDT installation's CLI project APIs failed. The
+current GUI script is `ansys_validation/run_b6_maxwell.py`.
+
+1. Launch Ansys Electronics Desktop (tested with v252).
+2. Create a new blank project with no design.
+3. Choose **Tools > Run Script** and select
+   `ansys_validation/run_b6_maxwell.py`.
+4. Wait for solve and matrix export to finish. The script sets the material
+   insulator threshold to `1e-8 S/m`; this is essential so the medium
+   conductivity `0.025 S/m` is not treated as zero. It also stops if the
+   exported real admittance is all zero.
+5. In the same AEDT GUI, choose **Tools > Run Script** again and select
+   `ansys_validation/export_ymatrix_csv.py` to produce the 120 floating-pair
+   responses. Alternatively, from PowerShell at the project root, run:
+
+   ```powershell
+   py ansys_validation\export_ymatrix_csv.py
+   ```
+
+   This postprocessor uses only Python's standard library. It prefers the
+   direct `Re(Y)` and `Im(Y)` reports, reconstructs the 16-terminal matrix by
+   current conservation, then floats the 14 unselected electrodes for each
+   pair. The CSV has `Yreal`, `Yim`, `abs_Y`, and `phase` columns, with pairs in
+   acquisition order `(1,2), (1,3), ..., (1,16), (2,3), ...`.
+
+The Maxwell script writes its project and raw matrix reports to
+`ansys_validation/results/`; the postprocessor writes
+`B6_Maxwell_pairs_120.csv` there. The script uses a coarse polygonal model for
+the AEDT Student mesh limit and approximates the small EIDORS contact
+impedance with a resistive contact sector. It is therefore a successful
+forward-solver/export workflow, but its geometry, contacts, and mesh are not
+identical to EIDORS B6. Compare the pair data with those limitations in mind;
+do not describe the two meshes as identical or claim mesh-converged numerical
+agreement. See `ansys_validation/README.md` for details.
 

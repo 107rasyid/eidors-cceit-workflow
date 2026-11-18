@@ -401,3 +401,20 @@ the optional reconstruction demo is separate and does not change the paper workf
   solver-to-solver differences. The 120-pair run has not been made.
 - See `femm_validation/README.md` for dependencies and commands. Next step is
   to compare the 1-9 complex current with the EIDORS pair and then run `--all`.
+
+## Maxwell 2D AC Conduction cross-solver check
+
+- Added the isolated Maxwell GUI workflow under `ansys_validation/` for a
+  coarse explicit-layer voltage-driven/current-sense check. The working
+  sequence is Tools > Run Script for `run_b6_maxwell.py`, followed by
+  `export_ymatrix_csv.py` in AEDT or with ordinary Python.
+- Set the Maxwell material insulator threshold to `1e-8 S/m`; without it,
+  Maxwell's default threshold classifies the `0.025 S/m` medium as insulating,
+  which caused the all-zero real admittance and 90-degree phase outputs.
+- The user confirmed the solve and 120-pair export now complete. The exporter
+  uses direct `Re(Y)`/`Im(Y)` reports when available and has no NumPy dependency,
+  so it runs in AEDT's IronPython script runner. No independent numerical
+  comparison against EIDORS has been recorded yet.
+- Updated the root and Maxwell READMEs with the supported GUI procedure,
+  output files, mesh/contact caveats, and a warning not to use the failed CLI
+  launcher as the normal path.
